@@ -1,13 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>เข้าสู่ระบบ</title>
 </head>
 
 <body>
+
+    <h2>เข้าสู่ระบบ</h2>
+
+    <form id="loginForm">
+        <label for="username">ชื่อผู้ใช้:</label><br>
+        <input type="text" id="username" required><br><br>
+
+        <label for="password">รหัสผ่าน:</label><br>
+        <input type="password" id="password" required><br><br>
+
+        <button type="submit">ล็อกอิน</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const resultEl = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // กันรีเฟรชหน้า
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            resultEl.textContent = '';
+
+            try {
+                const res = await fetch('/api/login', {      // << เชื่อม API ตรงนี้
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();               // รับ JSON จาก API
+
+                resultEl.textContent = data.message || 'ไม่มีข้อความจากเซิร์ฟเวอร์';
+                resultEl.style.color = res.ok ? 'green' : 'red';
+
+            } catch (err) {
+                console.error(err);
+                resultEl.textContent = 'เชื่อมต่อ API ไม่ได้';
+                resultEl.style.color = 'red';
+            }
+        });
+    </script>
 
 </body>
 
