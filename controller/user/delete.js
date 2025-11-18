@@ -1,10 +1,9 @@
 const { deleteUser } = require('../../functions/checkLogin');
 
-
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     const { username, password } = req.body;
 
-    const result = deleteUser(username, password);
+    const result = await deleteUser(username, password);
 
-    return res.status(result.status).json(result)
-}
+    return res.status(result.status).json(result);
+};
