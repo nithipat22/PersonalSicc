@@ -21,12 +21,12 @@ async function checkLogin(username, password) {
 }
 
 // ฟังก์ชันสมัครสมาชิก
-function registerUser(username, password) {
+async function registerUser(username, password) {
     if (!username || !password) {
         return { status: false, message: "กรุณากรอกข้อมูลให้ครบ" };
     }
 
-    const exists = users.find(u => u.username === username);
+    const exists = await userModels.findByColumn("username", username);
     if (exists) {
         return { status: false, message: "ชื่อผู้ใช้มีอยู่แล้ว" };
     }

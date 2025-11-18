@@ -51,6 +51,21 @@ const userModels = {
       }
     );
     return query;
+  },
+
+  async findByColumn(column,value){
+    let sql = `SELECT * FROM user WHERE ${column} = ?`;
+    let query = await pool.query(
+      sql,
+      [value],
+      (error, result) => {
+        if (error) {
+          throw error;
+        }
+        return result;
+      }
+    );
+    return query;
   }
 };
 

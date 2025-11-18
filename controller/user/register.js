@@ -5,7 +5,7 @@ const userModels = require('../../models/users')
 module.exports = async (req, res) => {
     const { username, password, fullname, email } = req.body;
 
-    const result = registerUser(username, password);
+    const result = await registerUser(username, password);
     if(!result.status){
         return res.status(400).json({ message: result.message });
     }
