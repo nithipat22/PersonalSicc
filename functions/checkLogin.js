@@ -1,15 +1,17 @@
+const userModels = require("../models/users");
+
 // จำลองฐานข้อมูลในหน่วยความจำ
 let users = [
     { username: 'admin', password: '1234' },
 ];
 
 // ฟังก์ชันเช็คล็อกอิน
-function checkLogin(username, password) {
+async function checkLogin(username, password) {
     if (!username || !password) {
         return { status: 400, message: "กรุณากรอกข้อมูลให้ครบ" };
     }
 
-    const user = users.find(u => u.username === username && u.password === password);
+    const user = await userModels.checkAuthLogin({ username, password });
 
     if (!user) {
         return { status: 401, message: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" };
@@ -19,18 +21,18 @@ function checkLogin(username, password) {
 }
 
 // ฟังก์ชันสมัครสมาชิก
-function registerUser(username, password) {
+async function registerUser(username, password) {
     if (!username || !password) {
-        return { status: 400, message: "กรุณากรอกข้อมูลให้ครบ" };
+        return { status: false, message: "กรุณากรอกข้อมูลให้ครบ" };
     }
 
-    const exists = users.find(u => u.username === username);
+    const exists = await userModels.findByColumn("username", username);
     if (exists) {
-        return { status: 409, message: "ชื่อผู้ใช้มีอยู่แล้ว" };
+        return { status: false, message: "ชื่อผู้ใช้มีอยู่แล้ว" };
     }
 
     users.push({ username, password });
-    return { status: 201, message: "สมัครสมาชิกสำเร็จ" };
+    return { status: true, message: "สมัครสมาชิกสำเร็จ" };
 }
 
 // ฟังก์ชันรีเซ็ตรหัสผ่าน

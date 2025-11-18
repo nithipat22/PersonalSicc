@@ -1,9 +1,9 @@
 const { checkLogin } = require('../../functions/checkLogin');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     const { username, password } = req.body;
 
-    const result = checkLogin(username, password);
+    const result = await checkLogin(username, password);
 
     return res.status(result.status).json({ message: result.message });
 };
