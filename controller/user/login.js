@@ -5,7 +5,6 @@ module.exports = async (req, res) => {
 
     const result = await checkLogin(username, password);
 
-    return res.status(result.status).json({ message: result.message });
+    return res.status(result.status).json(result);
 };
-
 
